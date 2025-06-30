@@ -1,7 +1,12 @@
 from fastapi import FastAPI
+# from app.models import Base
+from app.database import engine
 
-app = FastAPI(title="FastAPI ToDo API")
+app = FastAPI()
+
+
+# Base.metadata.create_all(bind=engine)
 
 @app.get("/")
-def read_root():
-    return {"message": "Welcome to FastAPI ToDo API!"}
+def root():
+    return {"message": "FastAPI + PostgreSQL is working!"}
