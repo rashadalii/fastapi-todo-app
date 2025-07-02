@@ -1,7 +1,7 @@
 from app import models
 
 
-
+# crud operations
 def create_task(db, task_data, user_id):
     task = models.Task(**task_data.dict(), user_id=user_id)
     db.add(task)
@@ -35,3 +35,21 @@ def delete_task(db, task_id, user_id):
         db.commit()
         return True
     return False
+
+
+# Mark task as completed
+def mark_task_completed(db, task_id: int, user_id: int):
+    task = db.query(models.Task).filter(models.Task.id == task_id, models.Task.user_id == user_id).first()
+    if not task:
+        return None
+    task.status = models.TaskStatus.completed
+    db.commit()
+    db.refresh(task)
+    return task
+
+# Filter tasks by status
+def filter_tasks_by_status(db, user_id: int, status: str):
+    return db.query(models.Task).filter(
+        models.Task.user_id == user_id,
+        models.Task.status == status
+    ).all()
