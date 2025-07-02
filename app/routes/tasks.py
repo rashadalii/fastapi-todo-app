@@ -13,13 +13,14 @@ router = APIRouter(prefix="/tasks", tags=["Tasks"])
 def create_task(task: schemas.TaskBase, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     return crud.create_task(db, task, current_user.id)
 
+# get all tasks and user tasks with pagination
 @router.get("/", response_model=List[schemas.TaskOut])
-def list_tasks(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
-    return crud.get_all_tasks(db)
+def list_tasks(skip: int = 0, limit: int = 10, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    return crud.get_all_tasks(db, skip=skip, limit=limit)
 
 @router.get("/my", response_model=List[schemas.TaskOut])
-def list_user_tasks(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
-    return crud.get_user_tasks(db, current_user.id)
+def list_user_tasks(skip: int = 0, limit: int = 10, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    return crud.get_user_tasks(db, current_user.id, skip=skip, limit=limit)
 
 
 # Filter tasks by status
@@ -28,7 +29,7 @@ def filter_tasks(status: schemas.TaskStatus, db: Session = Depends(get_db), curr
     tasks = crud.filter_tasks_by_status(db, current_user.id, status)
     return tasks
 
-
+# get, update, delete task by id
 @router.get("/{task_id}", response_model=schemas.TaskOut)
 def get_task(task_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     task = crud.get_task_by_id(db, task_id)

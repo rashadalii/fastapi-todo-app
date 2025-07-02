@@ -9,11 +9,12 @@ def create_task(db, task_data, user_id):
     db.refresh(task)
     return task
 
-def get_all_tasks(db):
-    return db.query(models.Task).all()
+def get_all_tasks(db, skip: int = 0, limit: int = 10):
+    return db.query(models.Task).offset(skip).limit(limit).all()
 
-def get_user_tasks(db, user_id):
-    return db.query(models.Task).filter(models.Task.user_id == user_id).all()
+def get_user_tasks(db, user_id: int, skip: int = 0, limit: int = 10):
+    return db.query(models.Task).filter(models.Task.user_id == user_id).offset(skip).limit(limit).all()
+
 
 def get_task_by_id(db, task_id):
     return db.query(models.Task).filter(models.Task.id == task_id).first()
