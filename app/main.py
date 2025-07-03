@@ -1,18 +1,12 @@
 from fastapi import FastAPI
-from app.models import Base
-from app.database import engine
-from app.routes import tasks,users
+from app.routes import auths, users, tasks
+from app.database import Base, engine
 
+app = FastAPI(title="Andersen TODO List", version="0.1.0")
 
-
-app = FastAPI()
-
-# db setup
 Base.metadata.create_all(bind=engine)
 
-# routers
-app.include_router(users.router) 
+# Register routers
+app.include_router(auths.router)
+app.include_router(users.router)
 app.include_router(tasks.router)
-
-
-
