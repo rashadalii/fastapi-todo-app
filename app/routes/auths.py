@@ -5,8 +5,7 @@ from app import schemas, models, auth
 from app.database import get_db
 from app.auth import create_access_token, create_refresh_token, verify_refresh_token
 
-router = APIRouter( tags=["Auth"] )
-
+router = APIRouter(prefix="/api/v1/auth", tags=["auth"])
 
 @router.post("/register", response_model=schemas.UserOut)
 def register(user: schemas.UserCreate, db: Session = Depends(get_db)):
