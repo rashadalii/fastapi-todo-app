@@ -44,7 +44,17 @@ def refresh_token(token: schemas.RefreshTokenRequest):
     try:
         payload = verify_refresh_token(token.refresh_token)
         username = payload.get("sub")
+        if not username:
+            raise HTTPException(status_code=401, detail="Invalid refresh token")
+            
         new_access_token = create_access_token(data={"sub": username})
-        return {"access_token": new_access_token, "token_type": "bearer"}
+        new_refresh_token = create_refresh_token(data={"sub": username})
+        
+        return {
+            "access_token": new_access_token,
+            "refresh_token": new_refresh_token,
+            "token_type": "bearer"
+        }
+        
     except Exception as e:
         raise HTTPException(status_code=401, detail="Invalid refresh token")
