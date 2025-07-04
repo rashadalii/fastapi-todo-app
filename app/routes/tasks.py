@@ -13,7 +13,7 @@ def list_tasks(skip: int = 0, limit: int = 10, db: Session = Depends(get_db), cu
     return crud.get_all_tasks(db, skip=skip, limit=limit)
 
 
-@router.get("/task_id", response_model=schemas.TaskOut)
+@router.get("/{task_id}", response_model=schemas.TaskOut)
 def get_task(
     task_id: int,
     db: Session = Depends(get_db),

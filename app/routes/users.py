@@ -30,7 +30,7 @@ def create_task(task: schemas.TaskBase, db: Session = Depends(get_db), current_u
 
 
 # Update Task
-@router.patch("/task_id", response_model=schemas.TaskOut)
+@router.patch("/{task_id}", response_model=schemas.TaskOut)
 def update_task(task_id: int, task_data: schemas.TaskUpdate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     task = crud.update_task(db, task_id, current_user.id, task_data)
     if task is None:
@@ -39,7 +39,7 @@ def update_task(task_id: int, task_data: schemas.TaskUpdate, db: Session = Depen
 
 
 #  Mark Task as Completed
-@router.patch("/task_id/complete", response_model=schemas.TaskOut)
+@router.patch("/{task_id}/complete", response_model=schemas.TaskOut)
 def complete_task(task_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     task = crud.mark_task_completed(db, task_id, current_user.id)
     if task is None:
@@ -48,7 +48,7 @@ def complete_task(task_id: int, db: Session = Depends(get_db), current_user: Use
 
 
 # Delete Task
-@router.delete("/task_id")
+@router.delete("/{task_id}")
 def delete_task(task_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     if not crud.delete_task(db, task_id, current_user.id):
         raise HTTPException(status_code=403, detail="Forbidden or task not found")
