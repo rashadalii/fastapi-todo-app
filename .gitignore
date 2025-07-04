@@ -15,7 +15,7 @@ downloads/
 eggs/
 .eggs/
 lib/
-test.db/
+test.db
 lib64/
 parts/
 sdist/
