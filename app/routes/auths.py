@@ -36,9 +36,6 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
             "refresh_token": refresh_token, 
             "token_type": "bearer"}
 
-
-
-
 @router.post("/refresh", response_model=schemas.Token)
 def refresh_token(token: schemas.RefreshTokenRequest):
     try:
